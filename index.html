@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --cyan: #00f5ff;
+  --cyan-glow: rgba(0,245,255,0.6);
+  --green: #00ff88;
+  --bg: #03080f;
+  --text: #c8dde8;
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Kanit', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background-image: linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px; animation: gridShift 20s linear infinite;
+}
+@keyframes gridShift { to { background-position: 48px 48px; } }
+.scanlines {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px);
+}
+.radial-glow {
+  position: fixed; z-index: 0; width: 800px; height: 800px; top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  background: radial-gradient(circle, rgba(0,245,255,0.06) 0%, transparent 70%); pointer-events: none;
+}
+.page { position: relative; z-index: 2; max-width: 960px; margin: 0 auto; padding: 40px 24px 60px; }
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 60px; border-bottom: 1px solid rgba(0,245,255,0.15); padding-bottom: 14px;
+}
+.topbar-id { font-family: var(--mono); font-size: 0.7rem; color: rgba(0,245,255,0.5); letter-spacing: 2px; }
+.status-dot { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.65rem; color: var(--green); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero { text-align: center; margin-bottom: 64px; }
+.badge {
+  display: inline-block; font-family: var(--mono); font-size: 0.65rem; color: var(--cyan);
+  letter-spacing: 3px; border: 1px solid rgba(0,245,255,0.3); padding: 5px 16px; border-radius: 2px;
+  margin-bottom: 24px; background: rgba(0,245,255,0.04); animation: fadeDown 0.6s ease both;
+}
+.hero-title {
+  font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 700; line-height: 1.1; color: #fff;
+  text-shadow: 0 0 40px rgba(0,245,255,0.4); animation: fadeDown 0.7s 0.1s ease both; margin-bottom: 8px;
+}
+.hero-title span { color: var(--cyan); }
+.hero-sub { font-family: var(--mono); font-size: 0.85rem; color: rgba(0,245,255,0.5); letter-spacing: 2px; animation: fadeDown 0.7s 0.2s ease both; margin-bottom: 20px; }
+.divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); margin: 0 auto 20px; animation: fadeDown 0.7s 0.3s ease both; }
+.hero-desc { font-size: 0.95rem; font-weight: 300; color: rgba(200,221,232,0.7); max-width: 520px; margin: 0 auto; line-height: 1.8; animation: fadeDown 0.7s 0.35s ease both; }
+@keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+.section-label { font-family: var(--mono); font-size: 0.65rem; color: rgba(0,245,255,0.4); letter-spacing: 3px; margin-bottom: 20px; text-align: center; }
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+
+/* ✅ เปลี่ยนเป็น <a> tag */
+.card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,245,255,0.04));
+  border: 1px solid rgba(0,245,255,0.2); border-radius: 8px; padding: 28px 24px;
+  cursor: pointer; transition: all 0.3s ease; overflow: hidden;
+  animation: fadeUp 0.6s ease both;
+  text-decoration: none; color: inherit; display: block; /* สำคัญสำหรับ <a> */
+}
+.card:nth-child(1){animation-delay:0.4s} .card:nth-child(2){animation-delay:0.5s}
+.card:nth-child(3){animation-delay:0.6s} .card:nth-child(4){animation-delay:0.7s}
+.card:nth-child(5){animation-delay:0.75s}
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.card::before {
+  content:''; position:absolute; top:0; left:0; width:20px; height:20px;
+  border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan);
+  border-radius: 8px 0 0 0; opacity: 0.6; transition: opacity 0.3s;
+}
+.card::after {
+  content:''; position:absolute; bottom:0; right:0; width:20px; height:20px;
+  border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan);
+  border-radius: 0 0 8px 0; opacity: 0.3; transition: opacity 0.3s;
+}
+.card:hover { border-color: var(--cyan); background: rgba(0,245,255,0.07); transform: translateY(-4px); box-shadow: 0 0 30px rgba(0,245,255,0.2); }
+.card:hover::before, .card:hover::after { opacity: 1; }
+.card-num { font-family: var(--mono); font-size: 0.6rem; color: rgba(0,245,255,0.35); letter-spacing: 2px; margin-bottom: 12px; }
+.card-icon { font-size: 2rem; margin-bottom: 14px; }
+.card-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.card-desc { font-size: 0.8rem; font-weight: 300; color: rgba(200,221,232,0.55); line-height: 1.6; }
+.card-arrow { position: absolute; bottom: 20px; right: 20px; font-family: var(--mono); font-size: 0.7rem; color: rgba(0,245,255,0.3); transition: all 0.3s; }
+.card:hover .card-arrow { color: var(--cyan); transform: translateX(4px); }
+.card-wide { grid-column: 1 / -1; display: flex; align-items: center; gap: 24px; padding: 22px 28px; }
+.card-wide .card-icon { font-size: 1.8rem; margin-bottom: 0; flex-shrink: 0; }
+.card-wide .card-body { flex: 1; }
+.card-wide .card-title { margin-bottom: 4px; }
+.footer { border-top: 1px solid rgba(0,245,255,0.1); padding-top: 24px; text-align: center; font-family: var(--mono); font-size: 0.62rem; color: rgba(0,245,255,0.25); letter-spacing: 2px; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="scanlines"></div>
+<div class="radial-glow"></div>
+
+<div class="page">
+  <div class="topbar">
+    <div class="topbar-id">SYS://KRUJR-CLASS-v2.0</div>
+    <div class="status-dot"><div class="dot"></div>ONLINE</div>
+  </div>
+
+  <div class="hero">
+    <div class="badge">◈ COMPUTER CLASSROOM ◈</div>
+    <h1 class="hero-title">ยินดีต้อนรับสู่<br><span>ห้องเรียนคอมพิวเตอร์</span><br>ครูจูเนียร์</h1>
+    <div class="hero-sub">// JUNIOR'S DIGITAL LEARNING HUB _</div>
+    <div class="divider"></div>
+    <p class="hero-desc">เรียนรู้เทคโนโลยีและคอมพิวเตอร์ผ่านบทเรียนที่สนุก เข้าใจง่าย พร้อมกิจกรรมและสื่อการสอนครบครัน</p>
+  </div>
+
+  <div class="section-label">◦ SELECT DESTINATION ◦</div>
+  <div class="menu-grid">
+
+    <!-- ✅ ใช้ <a href="..." target="_top"> แทน onclick -->
+    <a class="card" href="https://sites.google.com/view/krujrclass/%E0%B9%80%E0%B8%A5%E0%B8%AD%E0%B8%81%E0%B8%AB%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%A2%E0%B8%99" target="_top">
+      <div class="card-num">// 01</div>
+      <div class="card-icon">🏫</div>
+      <div class="card-title">เลือกห้องเรียน</div>
+      <div class="card-desc">เข้าสู่บทเรียนแยกตามระดับชั้น ป.1–ม.6</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="https://sites.google.com/view/krujrclass/ใบงาน" target="_top">
+      <div class="card-num">// 02</div>
+      <div class="card-icon">📄</div>
+      <div class="card-title">ใบงาน / กิจกรรม</div>
+      <div class="card-desc">ดาวน์โหลดใบงาน และส่งงานออนไลน์</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="https://sites.google.com/view/krujrclass/วิดีโอ" target="_top">
+      <div class="card-num">// 03</div>
+      <div class="card-icon">🎬</div>
+      <div class="card-title">สื่อวิดีโอ</div>
+      <div class="card-desc">วิดีโอบทเรียนและบันทึกการสอน</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="https://sites.google.com/view/krujrclass/คะแนน" target="_top">
+      <div class="card-num">// 04</div>
+      <div class="card-icon">📊</div>
+      <div class="card-title">ตรวจสอบคะแนน</div>
+      <div class="card-desc">ผลการเรียนและสถิติความก้าวหน้า</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card card-wide" href="https://sites.google.com/view/krujrclass/เกี่ยวกับ" target="_top">
+      <div class="card-icon">👨‍💻</div>
+      <div class="card-body">
+        <div class="card-title">เกี่ยวกับครูจูเนียร์</div>
+        <div class="card-desc">ข้อมูลผู้สอน ช่องทางติดต่อ และนโยบายห้องเรียน</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+  <div class="footer">◈ KRU JUNIOR COMPUTER CLASS ◈ | ห้องเรียนคอมพิวเตอร์ | 2568</div>
+</div>
+
+</body>
+</html>
